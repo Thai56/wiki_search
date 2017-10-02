@@ -2,17 +2,32 @@ import React, { PureComponent } from 'react';
 import axios from 'axios';
 import { Map, fromJS } from 'immutable';
 import { Segment, Input, Header, Divider, Form } from 'semantic-ui-react';
+import styled from 'styled-components';
 import './App.css';
 
-const searchURL = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=';
+export const searchURL = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=';
 
-const containerStyle = { height: '100vh', backgroundColor: '#f9f9f9'};
+const AppWrapper = styled.div.attrs({
+  className: 'App',
+})`
+  height: 100vh;
+  background-color: #f9f9f9;
+`;
 
 const segmentStyle = { cursor: 'pointer', marginBottom: 24 };
 
-const bold = { fontWeight: 600 };
+const BoldHeader = styled.h3`
+  font-weigth: 600;
+`;
 
-const listStyle = { listStyle: 'none', padding: '0 10px 0 10px' };
+const PlainList = styled.ul`
+  list-style: none;
+  padding: 0 10px 0 10px;
+`;
+
+const ResultContainer = styled.div.attrs({
+  className: 'result-container',
+})``;
 
 class App extends PureComponent {
   state = { search: '', resultsMap: '' }
@@ -62,7 +77,7 @@ class App extends PureComponent {
         <Segment key={i} style={segmentStyle}>
           <a onClick={() => window.open(resultMap.get('link')) }>
             <li>
-              <h3 style={bold}>{resultMap.get('result')}</h3>
+              <BoldHeader>{resultMap.get('result')}</BoldHeader>
               <div>{resultMap.get('desc')}</div>
             </li>
           </a>
@@ -78,7 +93,8 @@ class App extends PureComponent {
   render() {
     // console.log(this.state.resultsMap)
     return (
-      <div className="App" style={containerStyle}>
+      <AppWrapper>
+      {/*<div className="App" style={containerStyle}>*/}
         <div className="App-header">
           <Header as='h2'>WikiMedia Search</Header>
           <Divider />
@@ -86,14 +102,15 @@ class App extends PureComponent {
             <Input type='text' value={this.state.search} onChange={(e) => this.setState({ search: e.target.value })}/>
           </Form>
         </div>
-        <div className="result-container">
+        <ResultContainer>
           {
             this.state.resultsMap
             &&
-            <ul style={listStyle}>{this.getFormattedResults()}</ul>
+            <PlainList>{this.getFormattedResults()}</PlainList>
           }
-        </div>
-      </div>
+        </ResultContainer>
+      {/*</div>*/}
+      </AppWrapper>
     );
   }
 }
